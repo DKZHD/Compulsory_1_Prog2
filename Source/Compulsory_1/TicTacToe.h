@@ -26,10 +26,11 @@ public:
 		UMaterial* Blue;
 	UPROPERTY(EditAnywhere)
 		UMaterial* White;
-	APlayerController* player;
 	TArray<bool>Slot;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int PlayerWin = 0;
 	bool Active = true;
+	bool Winner = false;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -52,4 +53,5 @@ public:
 	void Key8();
 	void Key9();
 	bool Draw();
+	void StartOver();
 };

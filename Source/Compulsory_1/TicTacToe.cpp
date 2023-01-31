@@ -4,6 +4,10 @@
 #include "TicTacToe.h"
 
 #include "Camera/CameraComponent.h"
+#include "Components/TextWidgetTypes.h"
+#include "Internationalization/Text.h"
+#include "Blueprint/UserWidget.h"
+#include "GameFramework/GameModeBase.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -46,6 +50,7 @@ ATicTacToe::ATicTacToe()
 	Camera->SetupAttachment(SpringArm);
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+
 }
 
 // Called when the game starts or when spawned
@@ -87,14 +92,21 @@ void ATicTacToe::Tick(float DeltaTime)
 		
 	if (PlayerWin == 1)
 	{
-		GEngine->AddOnScreenDebugMessage(0, 2.f, FColor::Blue, TEXT("Player1 Win"));
+		Winner = true;
+		GetWorld()->GetFirstPlayerController()->Pause();
 		
 	}
-		
 	else if(PlayerWin==2)
-		GEngine->AddOnScreenDebugMessage(0, 2.f, FColor::Red, TEXT("Player2 Win"));
+	{
+		Winner = true;
+		GetWorld()->GetFirstPlayerController()->Pause();
+		
+	}
 	else if(Draw())
-		GEngine->AddOnScreenDebugMessage(0, 2.f, FColor::Magenta, TEXT("Draw"));
+	{
+		Winner = true;
+		GetWorld()->GetFirstPlayerController()->Pause();
+	}
 }
 
 // Called to bind functionality to input
@@ -110,6 +122,7 @@ void ATicTacToe::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAction("7", IE_Pressed, this,&ATicTacToe::Key7);
 	PlayerInputComponent->BindAction("8", IE_Pressed, this,&ATicTacToe::Key8);
 	PlayerInputComponent->BindAction("9", IE_Pressed, this,&ATicTacToe::Key9);
+	PlayerInputComponent->BindAction("Restart", IE_Pressed, this, &ATicTacToe::StartOver).bExecuteWhenPaused = true;
 }
 
 void ATicTacToe::CheckWinner(UMaterial* color, int number1, int number2, int number3)
@@ -194,5 +207,21 @@ bool ATicTacToe::Draw()
 		if (Slot[i] == false)
 			return false;
 	}
+	PlayerWin = 3;
 	return true;
+}
+void ATicTacToe::StartOver()
+{
+	if (Winner == true)
+	{
+		PlayerWin = 0;
+		for (int i = 0; i < 9; i++)
+		{
+			Slot[i] = false;
+			Ball[i]->SetMaterial(0, White);
+		}
+		GetWorld()->GetFirstPlayerController()->SetPause(false);
+		Active = true;
+		Winner = false;
+	}
 }
