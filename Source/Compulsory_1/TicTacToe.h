@@ -21,7 +21,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		class UCameraComponent* Camera;
 	UPROPERTY(EditAnywhere)
-		UMaterial* Red;
+		class UMaterial* Red;
 	UPROPERTY(EditAnywhere)
 		UMaterial* Blue;
 	UPROPERTY(EditAnywhere)

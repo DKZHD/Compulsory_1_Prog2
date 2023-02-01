@@ -4,11 +4,10 @@
 #include "TicTacToe.h"
 
 #include "Camera/CameraComponent.h"
-#include "Components/TextWidgetTypes.h"
-#include "Internationalization/Text.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "UObject/ConstructorHelpers.h"
 
 // Sets default values
 ATicTacToe::ATicTacToe()
